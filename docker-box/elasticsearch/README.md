@@ -812,13 +812,30 @@ curl --location --request PUT 'localhost:9200/product_v4' \
    }
 }'
 
+### relocate shards 
+curl --location --request PUT 'localhost:9200/_cluster/settings' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "transient": {
+    "cluster.routing.allocation.disk.watermark.low": "2gb", 
+    "cluster.routing.allocation.disk.watermark.high": "1gb",
+    "cluster.routing.allocation.disk.watermark.flood_stage": "500mb",
+    "cluster.info.update.interval": "1m"
+  }
+}'
+
+### Making index alias 
+curl --location --request PUT 'localhost:9200/product_v4/_alias/product_alias'
+
 ### Update & Reindex 
 
 1. Close Index 
+Method: POST
 localhost:9200/product_v4/_close
 
-2. Update Settings OR Mapping Or oth 
+2. Update Settings OR Mapping Or both 
 https://sendovn.atlassian.net/wiki/spaces/IAS/pages/2665545874/Change+setting+li+n+quan+t+i+unicode+ng+i+d+ng
 
 3. Open Index 
+Method: POST
 localhost:9200/product_v4/_open
