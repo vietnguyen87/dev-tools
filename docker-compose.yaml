@@ -24,7 +24,7 @@ services:
       - ./data/elasticsearch/data01:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
-    profiles: ["dev-es"]
+    profiles: ["elasticsearch"]
     networks:
       - backend
 
@@ -49,7 +49,7 @@ services:
         hard: -1
     volumes:
       - ./data/elasticsearch/data02:/usr/share/elasticsearch/data
-    profiles: ["dev-es"]
+    profiles: ["elasticsearch"]
     networks:
       - backend
 
@@ -74,7 +74,7 @@ services:
         hard: -1
     volumes:
       - ./data/elasticsearch/data03:/usr/share/elasticsearch/data
-    profiles: ["dev-es"]
+    profiles: ["elasticsearch"]
     networks:
       - backend
 

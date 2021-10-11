@@ -1,13 +1,26 @@
 ##Tools & Testing. 
-Anything to support Dev 
+Wishing all our developers to have full services in the local environment. So this repo provides a `docker-compose` file build all services like mongo, kafka, es, redis. 
+Hope you feel free to contribute as soon as there is an internet problem.
 
 ##Start all services 
 docker-compose up 
 
 ## Start with profile 
-# by implicitly enabling profile `dev` or profile config in docker-compose.yaml 
-1. docker-compose --profile=dev up
-2. docker-compose --profile=redis up
+
+##For Dev includes: mongo, redis, kafka. 
+docker-compose --profile=dev up
+
+##Redis 
+docker-compose --profile=redis up
+
+##kafka & kafkaDrop 
+docker-compose --profile=kafka up
+
+##MongoDB  
+docker-compose --profile=mongodb up
 
 ### With Mongodb change connection string 
 mongodb://u_test:Him3d3jmuDGD@localhost:27017/services?authSource=admin
+
+##ElasticSearch   
+docker-compose --profile=elasticsearch up
