@@ -120,8 +120,11 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=Him3d3jmuDGD
       - MONGO_INITDB_DATABASE=admin
     volumes:
-      - ./data/mongodb:/data/db
-      - ./data/mongodb/logs:/var/log/mongodb/
+      - ${DATA_PATH}/mongodb:/data/db
+      - ${DATA_PATH}/mongo-entrypoint:/docker-entrypoint-initdb.d/
+      - ${DATA_PATH}/mongo_config:/data/configdb
+#      - ./data/mongodb:/data/db
+#      - ./data/mongodb/logs:/var/log/mongodb/
     profiles: ["dev", "mongodb"]
     ports:
       - 27017:27017
@@ -129,57 +132,60 @@ services:
       - backend
 
   redis-node-0:
-    image: docker.io/bitnami/redis:latest
+    image: docker.io/bitnami/redis-cluster:latest
     ports:
-      - "6379:6379"
+      - "6380:6379"
     restart: always
     volumes:
-      - ./data/redis/node0:/bitnami/redis/data
+      - ${DATA_PATH}/redis/node0:/bitnami/redis/data
     environment:
       - 'ALLOW_EMPTY_PASSWORD=yes'
       - 'REDIS_PORT=6379'
       - 'REDIS_NODES=redis-node-0 redis-node-1 redis-node-2'
+      - 'REDIS_CLUSTER_CREATOR=yes'
     profiles: ["dev", "redis"]
     networks:
       - backend
 
   redis-node-1:
-    image: docker.io/bitnami/redis:latest
+    image: docker.io/bitnami/redis-cluster:latest
     ports:
-      - "6380:6379"
+      - "6381:6379"
     volumes:
-      - ./data/redis/node1:/bitnami/redis/data
+      - ${DATA_PATH}/redis/node1:/bitnami/redis/data
     environment:
       - 'ALLOW_EMPTY_PASSWORD=yes'
       - 'REDIS_PORT=6379'
       - 'REDIS_NODES=redis-node-0 redis-node-1 redis-node-2'
+      - 'REDIS_CLUSTER_CREATOR=yes'
     profiles: ["dev", "redis"]
     networks:
       - backend
 
   redis-node-2:
-    image: docker.io/bitnami/redis:latest
+    image: docker.io/bitnami/redis-cluster:latest
     ports:
-      - "6381:6379"
+      - "6382:6379"
     volumes:
-      - ./data/redis/node2:/bitnami/redis/data
+      - ${DATA_PATH}/redis/node2:/bitnami/redis/data
     environment:
       - 'ALLOW_EMPTY_PASSWORD=yes'
       - 'REDIS_PORT=6379'
       - 'REDIS_NODES=redis-node-0 redis-node-1 redis-node-2'
+      - 'REDIS_CLUSTER_CREATOR=yes'
     profiles: ["dev", "redis"]
     networks:
       - backend
 
   redis-cluster-init:
-    image: docker.io/bitnami/redis:latest
+    image: docker.io/bitnami/redis-cluster:latest
     restart: "no"
     depends_on:
       - redis-node-0
       - redis-node-1
       - redis-node-2
     ports:
-      - 6382:6379
+      - 6383:6379
     environment:
       - 'ALLOW_EMPTY_PASSWORD=yes'
       - 'REDIS_CLUSTER_REPLICAS=1'
@@ -188,6 +194,40 @@ services:
     profiles: ["dev", "redis"]
     networks:
       - backend
+
+  # Grafana
+  grafana:
+    image: grafana/grafana
+    user: root
+    volumes:
+      - ${DATA_PATH}/grafana:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GF_SECURITY_ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GF_SECURITY_ADMIN_PASSWORD:-admin}
+      - VIRTUAL_HOST=grafana.${BASE_DOMAIN}
+      - VIRTUAL_PORT=3000
+      - LETSENCRYPT_HOST=grafana.${BASE_DOMAIN}
+    restart: always
+    networks:
+      - backend
+    profiles: [ "dev", "grafana" ]
+
+  # Prometheus
+  prometheus:
+    image: prom/prometheus
+    user: root
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./container/prometheus/config:/config
+      - ${DATA_PATH}/prometheus:/data
+    command:
+      - '--config.file=/config/prometheus.yml'
+      - '--storage.tsdb.path=/data'
+    restart: always
+    networks:
+      - backend
+    profiles: [ "dev", "prometheus" ]
 
 
 networks:

@@ -807,6 +807,16 @@ curl --location --request PUT 'localhost:9200/product_v4' \
          },
          "warehouse_location_ids":{
             "type":"integer"
+         },
+         "location": {
+             "properties": {
+                 "geo": {
+                     "type": "geo_point"
+                 },
+                 "city_id": {
+                     "type": "integer"
+                 }
+             }
          }
       }
    }
@@ -827,6 +837,15 @@ curl --location --request PUT 'localhost:9200/_cluster/settings' \
 ### Making index alias 
 curl --location --request PUT 'localhost:9200/product_v4/_alias/product_alias'
 
+### Add/Remove Alias 
+`{
+  "actions": [{ 
+      "add": {
+            "alias": "grocery_product_alias",  "index": "grocery_product_v5" 
+         }  
+   }]
+ }`
+
 ### Update & Reindex 
 
 1. Close Index 
@@ -839,3 +858,16 @@ https://sendovn.atlassian.net/wiki/spaces/IAS/pages/2665545874/Change+setting+li
 3. Open Index 
 Method: POST
 localhost:9200/product_v4/_open
+
+4. Re-Index
+
+`curl --location --request POST 'localhost:9200/_reindex' \
+ --header 'Content-Type: application/json' \
+ --data-raw '{
+   "source": {
+     "index": "product_v4"
+   },
+   "dest": {
+     "index": "product_v5"
+   }
+ }'`

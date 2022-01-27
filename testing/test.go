@@ -1,5 +1,11 @@
 package main
 
+import (
+	"fmt"
+	"sync"
+	"time"
+)
+
 /*	import (
 	"fmt"
 	"net/url"
@@ -188,3 +194,44 @@ func toJSON(m interface{}) string {
 	}
 	return strings.ReplaceAll(string(js), ",", ", ")
 }*/
+
+type Workers struct {
+	Number int
+	From   int64
+	To     int64
+}
+
+func main() {
+	var wg sync.WaitGroup
+	workers := []Workers{
+		{
+			Number: 1,
+			From:   1,
+			To:     100,
+		},
+		{
+			Number: 2,
+			From:   101,
+			To:     200,
+		},
+	}
+
+	for _, worker := range workers {
+		wg.Add(1)
+		go worker.process(&wg)
+	}
+	wg.Wait()
+}
+
+func (w Workers) process(wg *sync.WaitGroup) {
+	defer func() {
+		wg.Done()
+	}()
+
+	i := w.From
+	for i <= w.To {
+		time.Sleep(100 * time.Millisecond)
+		fmt.Println(fmt.Sprintf("worker %v: run task %v", w.Number, i))
+		i++
+	}
+}
