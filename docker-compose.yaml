@@ -78,6 +78,14 @@ services:
     networks:
       - backend
 
+  kibana:
+    image: docker.elastic.co/kibana/kibana-oss:7.3.2
+    ports:
+      - 5601:5601
+    environment:
+      ELASTICSEARCH_HOSTS: '["http://es-og.test.sendo.vn"]'
+      XPACK.SECURITY.ENABLED: 'false'
+
   kafdrop:
     image: obsidiandynamics/kafdrop
     restart: "no"
@@ -201,12 +209,14 @@ services:
     user: root
     volumes:
       - ${DATA_PATH}/grafana:/var/lib/grafana
+    ports:
+      - "3000:3000"
     environment:
       - GF_SECURITY_ADMIN_USER=${GF_SECURITY_ADMIN_USER:-admin}
       - GF_SECURITY_ADMIN_PASSWORD=${GF_SECURITY_ADMIN_PASSWORD:-admin}
-      - VIRTUAL_HOST=grafana.${BASE_DOMAIN}
-      - VIRTUAL_PORT=3000
-      - LETSENCRYPT_HOST=grafana.${BASE_DOMAIN}
+#      - VIRTUAL_HOST=grafana.local
+#      - VIRTUAL_PORT=3000
+#      - LETSENCRYPT_HOST=grafana.${BASE_DOMAIN}
     restart: always
     networks:
       - backend

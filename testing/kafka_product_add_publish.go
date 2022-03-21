@@ -21,7 +21,7 @@ func main() {
 	}
 
 	productData := &productBase.ChangedProductV2{
-		ProductId: 441575,
+		ProductId: 16688752,
 		Fields:    &types.FieldMask{Paths: []string{}},
 	}
 
