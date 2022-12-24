@@ -4,12 +4,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"gitlab.sendo.vn/protobuf/internal-apis-go/base"
-	"gitlab.sendo.vn/protobuf/internal-apis-go/prefilter"
-	"gitlab.sendo.vn/protobuf/internal-apis-go/product"
 	"google.golang.org/grpc"
 	"log"
 	"time"
+	"vietnt.me/protobuf/internal-apis-go/base"
+	"vietnt.me/protobuf/internal-apis-go/prefilter"
+	"vietnt.me/protobuf/internal-apis-go/product"
 )
 
 func main() {

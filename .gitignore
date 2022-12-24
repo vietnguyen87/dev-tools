@@ -3,3 +3,6 @@ vendor
 .idea/*
 data
 .env
+marathon-gcloud
+mrt-cloud
+testing

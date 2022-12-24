@@ -3,10 +3,10 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"gitlab.sendo.vn/protobuf/internal-apis-go/base"
-	"gitlab.sendo.vn/protobuf/internal-apis-go/product"
 	"google.golang.org/grpc"
 	"log"
+	"vietnt.me/protobuf/internal-apis-go/base"
+	"vietnt.me/protobuf/internal-apis-go/product"
 )
 
 func main() {
@@ -22,10 +22,14 @@ func main() {
 		QueryString: "category_id=1664,2902,1428,3220,529&gtprice=500000&is_installment=1&sortType=promotion_desc",
 	}*/
 
-	req := &product.SearchRequest{
-		Filters: &product.SearchFilters{
-			ProductType: 1,
-			//ShippingType:         1,
+	req := &product.ListRequest{
+		Sorts: nil,
+		Filters: &product.Filters{
+			CategoryId:      0,
+			StatusNew:       "0,1,2,3,4",
+			StockStatus:     -1,
+			SellerAdminId:   "15266",
+			IsConfigVariant: 0,
 		},
 		Pagination: &base.Pagination{
 			Limit: int32(20),
@@ -33,7 +37,7 @@ func main() {
 		},
 	}
 
-	response, err := client.Search(context.Background(), req)
+	response, err := client.List(context.Background(), req)
 	if err != nil {
 		log.Fatalf("Error: %s", err)
 	}

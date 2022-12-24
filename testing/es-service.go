@@ -4,14 +4,15 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/gogo/protobuf/types"
-	psV2 "gitlab.sendo.vn/protobuf/internal-apis-go/product/v2"
 	"google.golang.org/grpc"
 	"log"
+	psV2 "vietnt.me/protobuf/internal-apis-go/product/v2"
 )
 
 func main() {
 	var connection *grpc.ClientConn
-	connection, err := grpc.Dial("product-service-v2-grpc.test.sendo.vn:8989", grpc.WithInsecure())
+	//connection, err := grpc.Dial("product-service-v2-grpc.test.sendo.vn:8989", grpc.WithInsecure())
+	connection, err := grpc.Dial("localhost:16969", grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("connection err: %s", err)
 	}

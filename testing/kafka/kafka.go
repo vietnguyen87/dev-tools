@@ -5,11 +5,11 @@ import (
 	"crypto/sha1"
 	"encoding/json"
 	"fmt"
-	"gitlab.sendo.vn/core/sen-kit/pubsub"
-	kafka_go "gitlab.sendo.vn/core/sen-kit/pubsub/kafka-go"
-	productBase "gitlab.sendo.vn/protobuf/internal-apis-go/product/base"
 	"os"
 	"strings"
+	"vietnt.me/core/sen-kit/pubsub"
+	kafka_go "vietnt.me/core/sen-kit/pubsub/kafka-go"
+	productBase "vietnt.me/protobuf/internal-apis-go/product/base"
 )
 
 type Client struct {

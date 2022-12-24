@@ -4,7 +4,7 @@ import (
 	"dev/testing/kafka"
 	"fmt"
 	"github.com/gogo/protobuf/types"
-	productBase "gitlab.sendo.vn/protobuf/internal-apis-go/product/base"
+	productBase "vietnt.me/protobuf/internal-apis-go/product/base"
 )
 
 func main() {
